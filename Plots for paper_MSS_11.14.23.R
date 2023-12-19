@@ -37,10 +37,10 @@ drying_sardine <- read.csv("DATA/EXPERIMENTS/DRYING CURVES/DRYING_CURVES_WEIGHTS
 drying_squid <- read.csv("DATA/EXPERIMENTS/DRYING CURVES/DRYING_CURVES_WEIGHTS - SQUID.csv")
 
 # Combustion Experiments
-combustion_df <- read.csv("EnergyDensity.csv") %>% 
+combustion_df <- read.csv("SPECIES_EXPERIMENTS(ENERGY_DENSITY)_UPDATED_11.13.23.csv") %>% 
   mutate(species = as.character(SPECIES),
          organization = as.character(ORGANIZATION),
-         haul = as.factor(HAUL_NO), 
+         collection = as.factor(COLLECTION_NO), 
          date = mdy(DATE),
          month_num = as.numeric(substr(date, 6, 7)),
          month_name = case_when(month_num == 04~"April", 
@@ -151,7 +151,7 @@ drying_curve_krill <- ggplot(data = drying_krill, aes(x = TIME.h., y = WEIGHT.g.
         plot.title.position = "panel",
         plot.margin= unit(c(1, 1, 10, 10), "pt")) +
   scale_x_continuous(limits = c(0, 72), breaks = c(0, 24, 48, 72)) +
-  ggtitle("E. pacifica/ T. spinifera")
+  ggtitle("E. pacifica/T. spinifera")
 
 drying_curve_krill
 
@@ -202,15 +202,17 @@ drying_curve_squid <- ggplot(data = drying_squid, aes(x = TIME.h., y = WEIGHT.g.
 drying_curve_squid
 
 # Group graphs into single panel
-grid.arrange(drying_curve_krill,
-             drying_curve_squid,
-             drying_curve_anchovy,
-             drying_curve_sardine,
-             ncol = 1,
-             left = textGrob("Weight (grams)", rot = 90, gp=gpar(fontsize=15, fontfamily="Helvetica")),
-             bottom = textGrob("Time (hours)", gp=gpar(fontsize=15, fontfamily="Helvetica"))
+drying_curves_comb <- grid.arrange(drying_curve_krill,
+                                   drying_curve_squid,
+                                   drying_curve_anchovy,
+                                   drying_curve_sardine,
+                                   ncol = 1,
+                                   left = textGrob("Weight (grams)", rot = 90, gp=gpar(fontsize=15, fontfamily="Helvetica")),
+                                   bottom = textGrob("Time (hours)", gp=gpar(fontsize=15, fontfamily="Helvetica"))
 )
 
+
+dev.copy2pdf(file = "drying_curves_comb.pdf", width=4, height=8)
 
 
 
